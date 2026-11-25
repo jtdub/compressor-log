@@ -1,0 +1,1 @@
+Added a background worker that uses Redis. Set CELERY_BROKER_URL to the address of your Redis server.
