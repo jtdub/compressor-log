@@ -1,0 +1,1 @@
+Added a health check at /api/v1/health/. It returns HTTP 503 when the database does not answer.

@@ -1,0 +1,56 @@
+name: CI
+
+on:
+  pull_request:
+  push:
+    branches: [develop]
+
+permissions:
+  contents: read
+
+jobs:
+  backend:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: backend
+    env:
+      DJANGO_DEBUG: "true"
+      DJANGO_ALLOWED_HOSTS: localhost,127.0.0.1
+      POSTGRES_DB: compressor_log
+      POSTGRES_USER: compressor_log
+      POSTGRES_PASSWORD: compressor_log
+      POSTGRES_HOST: localhost
+      POSTGRES_PORT: "5432"
+    services:
+      postgres:
+        image: postgres:17
+        env:
+          POSTGRES_DB: compressor_log
+          POSTGRES_USER: compressor_log
+          POSTGRES_PASSWORD: compressor_log
+        ports:
+          - "5432:5432"
+        options: >-
+          --health-cmd "pg_isready -U compressor_log"
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 10
+    steps:
+      - uses: actions/checkout@v7
+      - uses: astral-sh/setup-uv@v10.4.0
+      - run: uv sync --frozen
+      - run: uv run ruff check .
+      - run: uv run ruff format --check .
+      - run: uv run mypy .
+      - run: uv run pytest
+
+  changelog:
+    if: github.event_name == 'pull_request'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+      - uses: astral-sh/setup-uv@v10.4.0
+      - run: uvx towncrier==26.9.0 check --compare-with origin/${{ github.base_ref }}
