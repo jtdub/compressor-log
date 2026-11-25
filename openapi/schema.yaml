@@ -1,0 +1,71 @@
+openapi: 3.0.3
+info:
+  title: compressor-log API
+  version: 0.1.0
+paths:
+  /api/v1/config/:
+    get:
+      operationId: config_retrieve
+      description: Return the public settings of the deployment.
+      tags:
+      - config
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Config'
+          description: ''
+  /api/v1/health/:
+    get:
+      operationId: health_retrieve
+      description: Return 200 when the database answers and 503 when it does not.
+      tags:
+      - health
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Health'
+          description: ''
+        '503':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Health'
+          description: ''
+components:
+  schemas:
+    Config:
+      type: object
+      description: Describe the response of the config endpoint.
+      properties:
+        saas_mode:
+          type: boolean
+      required:
+      - saas_mode
+    Health:
+      type: object
+      description: Describe the response of the health endpoint.
+      properties:
+        status:
+          type: string
+      required:
+      - status
+  securitySchemes:
+    basicAuth:
+      type: http
+      scheme: basic
+    cookieAuth:
+      type: apiKey
+      in: cookie
+      name: sessionid
