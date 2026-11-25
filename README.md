@@ -22,7 +22,7 @@ The settings read the process environment only. The `uv run --env-file` option l
 
 The API schema is at `http://localhost:8000/api/schema/`. The API documentation page is at `http://localhost:8000/api/docs/`. The page loads Swagger UI from `cdn.jsdelivr.net`, so it needs internet access.
 
-The file `openapi/schema.yaml` holds the schema. Run this command after you change an endpoint, then commit the file. CI fails when the file is not current.
+The file `openapi/schema.yaml` holds the schema. After you change an endpoint, run this command. Then commit the file. CI fails when the file is not current.
 
 ```bash
 cd backend
