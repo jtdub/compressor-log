@@ -1,5 +1,73 @@
 # compressor-log
 
+compressor-log is a multi-tenant app, hosted or self-hosted, that tracks high-pressure breathing-gas equipment: compressors, booster pumps, and nitrox membrane systems. It records hour meters, filtration stacks, filter cartridges, maintenance, fills, and the cost of each fill. An organization that operates 2 to 10 compressors is the typical user.
+
+## Prerequisites
+
+- Docker with Docker Compose v5.7.1. This is the version that the first start used.
+- uv, to run the backend commands on your host.
+- Node 24 and pnpm, to run the web commands on your host.
+
+## First start
+
+Run these commands from the repository root.
+
+```bash
+cp .env.example .env
+docker compose up --build --wait
+```
+
+The command starts the database, Redis, the API, the worker, and the web app. The service `migrate` runs the database migrations and then exits with code 0.
+
+| Address | Content |
+| --- | --- |
+| `http://localhost:5173` | The web app. It shows "API: ok" when the API works. |
+| `http://localhost:8000/api/v1/health/` | The health check of the API. |
+| `http://localhost:8000/api/docs/` | The API documentation page. |
+
+To stop the stack, run `docker compose down`.
+
+WARNING: This deletes the development database. Use `docker compose down -v` only when you want to remove the data volume.
+
+```bash
+docker compose down -v
+```
+
+## Tests in compose
+
+Start the stack first. Then run these commands.
+
+```bash
+docker compose run --rm api pytest
+docker compose run --rm web pnpm test
+```
+
+## Variables
+
+Compose reads the file `.env`. Compose publishes each port on `127.0.0.1` only.
+
+| Variable | Default | Use |
+| --- | --- | --- |
+| `DJANGO_DEBUG` | `true` | Turns on the Django debug mode. |
+| `DJANGO_SECRET_KEY` | empty | The Django secret key. An empty value is permitted only when `DJANGO_DEBUG` is `true`. |
+| `DJANGO_ALLOWED_HOSTS` | `localhost,127.0.0.1` | The host names that the API accepts. |
+| `POSTGRES_DB`, `POSTGRES_USER`, `POSTGRES_PASSWORD` | `compressor_log` | The database name, user, and password. |
+| `POSTGRES_HOST` | `localhost` | The database host. Compose sets `db` for the containers. |
+| `POSTGRES_PORT` | `5432` | The database port on your host. |
+| `REDIS_PORT` | `6379` | The Redis port on your host. |
+| `CELERY_BROKER_URL` | `redis://localhost:6379/0` | The Redis address of the worker. Compose sets `redis://redis:6379/0` for the containers. |
+| `SAAS_MODE` | `false` | Turns on the features of the hosted service. |
+| `API_PORT` | `8000` | The API port on your host. |
+| `WEB_PORT` | `5173` | The web app port on your host. |
+
+If a port is busy, set another value for the port variable in `.env`. Then run `docker compose up --build --wait` again.
+
+If you change `API_PORT`, set `VITE_API_PROXY_TARGET` to the new address for the host commands of the Web section. If you change `REDIS_PORT`, change the port in `CELERY_BROKER_URL`.
+
+## Changelog
+
+Each pull request needs a towncrier fragment in `changes/`. Name the file `<number>.<type>`, for example `34.added`. Write one item on one line. CI fails when the fragment is missing.
+
 ## Backend
 
 Run these commands from the repository root. Docker must run on your machine.

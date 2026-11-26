@@ -54,9 +54,9 @@ models:
 
 # How to run and test the project. Leave a value empty if the project has none yet.
 project:
-  run_command: ""
-  test_command: ""
-  app_url: ""
+  run_command: "docker compose up --build --wait"
+  test_command: "docker compose run --rm api pytest && docker compose run --rm web pnpm test"
+  app_url: "http://localhost:5173"
   changelog: towncrier
   screenshots: pr-comment
   # Local files that git ignores and that the app or the tests need, such as .env.
