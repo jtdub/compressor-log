@@ -79,3 +79,22 @@ jobs:
       - run: pnpm test
       - run: pnpm generate:api
       - run: git diff --exit-code -- ":/web/src/api/"
+
+  compose-smoke:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - run: cp .env.example .env
+      - run: docker compose version
+      - run: docker compose up --build --wait
+      - run: curl -f http://localhost:8000/api/v1/health/
+      - run: curl -f http://localhost:5173/
+      - run: curl -f http://localhost:5173/api/v1/health/
+      - run: docker compose exec -T worker celery -A config inspect registered | grep core.ping
+      - run: |
+          docker compose stop db
+          test "$(curl -s -o /dev/null -w '%{http_code}' --max-time 15 http://localhost:8000/api/v1/health/)" = "503"
+      - if: failure()
+        run: docker compose logs
+      - if: always()
+        run: docker compose down -v

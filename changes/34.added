@@ -1,0 +1,1 @@
+Added a compose.yaml file for development. The docker compose up command starts the API, the web app, the database, and the worker.
