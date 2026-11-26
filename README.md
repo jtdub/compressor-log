@@ -50,7 +50,7 @@ Compose reads the file `.env`. Compose publishes each port on `127.0.0.1` only.
 | --- | --- | --- |
 | `DJANGO_DEBUG` | `true` | Turns on the Django debug mode. |
 | `DJANGO_SECRET_KEY` | empty | The Django secret key. An empty value is permitted only when `DJANGO_DEBUG` is `true`. |
-| `DJANGO_ALLOWED_HOSTS` | `localhost,127.0.0.1` | The host names that the API accepts. |
+| `DJANGO_ALLOWED_HOSTS` | `localhost,127.0.0.1` | The host names that the API accepts. Compose adds `api` for the web proxy. |
 | `POSTGRES_DB`, `POSTGRES_USER`, `POSTGRES_PASSWORD` | `compressor_log` | The database name, user, and password. |
 | `POSTGRES_HOST` | `localhost` | The database host. Compose sets `db` for the containers. |
 | `POSTGRES_PORT` | `5432` | The database port on your host. |
