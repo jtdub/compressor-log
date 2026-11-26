@@ -224,3 +224,7 @@ __marimo__/
 
 # sdlc-crew run state
 .sdlc-crew-run/
+
+# Web app
+node_modules/
+!web/src/**/lib/
