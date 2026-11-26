@@ -24,6 +24,7 @@ export default function App() {
     const timer = setTimeout(() => controller.abort(), HEALTH_TIMEOUT_MS);
     let active = true;
     readApiStatus(controller.signal).then((result) => {
+      clearTimeout(timer);
       if (active) {
         setStatus(result);
       }

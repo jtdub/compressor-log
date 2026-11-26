@@ -62,7 +62,9 @@ describe("App", () => {
     );
     render(<App />);
     expect(screen.getByText("API: checking")).toBeTruthy();
-    await act(() => vi.advanceTimersByTimeAsync(5000));
+    await act(() => vi.advanceTimersByTimeAsync(4999));
+    expect(screen.getByText("API: checking")).toBeTruthy();
+    await act(() => vi.advanceTimersByTimeAsync(1));
     expect(screen.getByText("API: not available")).toBeTruthy();
   });
 });

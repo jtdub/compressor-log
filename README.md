@@ -50,11 +50,17 @@ Run these commands from the repository root. Node 24 and pnpm must be on your ma
 cd web
 pnpm install
 pnpm dev
-pnpm test
-pnpm lint && pnpm format:check && pnpm typecheck
 ```
 
 `pnpm dev` starts the web app at `http://localhost:5173`. The API must run at `http://localhost:8000`.
+
+To run the tests and the checks, use a second terminal.
+
+```bash
+cd web
+pnpm test
+pnpm lint && pnpm format:check && pnpm typecheck
+```
 
 Vite forwards each request for `/api` to the API. To use another API address, set `VITE_API_PROXY_TARGET` before you run `pnpm dev`.
 
