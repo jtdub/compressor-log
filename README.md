@@ -41,3 +41,32 @@ uv run --env-file ../.env celery -A config worker -l info
 ```
 
 If you change `REDIS_PORT`, change the port in `CELERY_BROKER_URL` to the same value.
+
+## Web
+
+Run these commands from the repository root. Node 24 and pnpm must be on your machine.
+
+```bash
+cd web
+pnpm install
+pnpm dev
+```
+
+`pnpm dev` starts the web app at `http://localhost:5173`. The API must run at `http://localhost:8000`.
+
+To run the tests and the checks, use a second terminal.
+
+```bash
+cd web
+pnpm test
+pnpm lint && pnpm format:check && pnpm typecheck
+```
+
+Vite forwards each request for `/api` to the API. To use another API address, set `VITE_API_PROXY_TARGET` before you run `pnpm dev`.
+
+The web app calls the API through a typed client. The file `web/src/api/schema.d.ts` holds the types. After you change `openapi/schema.yaml`, run this command. Then commit the file. CI fails when the file is not current.
+
+```bash
+cd web
+pnpm generate:api
+```
