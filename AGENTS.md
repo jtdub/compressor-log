@@ -5,15 +5,15 @@ short. Put the reason next to each rule.
 
 ## Project
 
-<!-- One paragraph: what the app does and who uses it. -->
+compressor-log is a multi-tenant app, hosted or self-hosted, that tracks high-pressure breathing-gas equipment: compressors, booster pumps, and nitrox membrane systems. It records hour meters, filtration stacks, filter cartridges, maintenance, fills, and the cost of each fill. An organization that operates 2 to 10 compressors is the typical user.
 
 ## Run and test
 
 ```bash
 # start the app
-<run command>
+docker compose up --build --wait
 # run the tests
-<test command>
+docker compose run --rm api pytest && docker compose run --rm web pnpm test
 ```
 
 ## Rules
