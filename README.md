@@ -18,6 +18,19 @@ uv run ruff check . && uv run ruff format --check .
 
 The settings read the process environment only. The `uv run --env-file` option loads `.env` for a host command.
 
+### API schema
+
+The API schema is at `http://localhost:8000/api/schema/`. The API documentation page is at `http://localhost:8000/api/docs/`. The page loads Swagger UI from `cdn.jsdelivr.net`, so it needs internet access.
+
+The file `openapi/schema.yaml` holds the schema. After you change an endpoint, run this command. Then commit the file. CI fails when the file is not current.
+
+```bash
+cd backend
+uv run --env-file ../.env python manage.py spectacular --file ../openapi/schema.yaml --validate --fail-on-warn
+```
+
+`SAAS_MODE` is `false` by default. `GET /api/v1/config/` returns its value.
+
 ### Worker
 
 Start the Celery worker in a second terminal. The `redis` service must run.

@@ -44,6 +44,8 @@ jobs:
       - run: uv run ruff format --check .
       - run: uv run mypy .
       - run: uv run pytest
+      - run: uv run python manage.py spectacular --file ../openapi/schema.yaml --validate --fail-on-warn
+      - run: git diff --exit-code -- ":/openapi/"
 
   changelog:
     if: github.event_name == 'pull_request'
